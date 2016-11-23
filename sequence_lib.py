@@ -73,3 +73,31 @@ def sample_from_list(file_in,taxa_list,file_out):
 					fout.write(fin.readline())
 				except:
 					print ('taxon inconsistent in tree and sequence files')
+
+
+def count_gaps(seq_aln):
+	N = len(seq_aln[0])
+	gap_count = [0]*N
+	for seq in seq_aln:
+		for i in range(N):
+			if seq[i] == '-':
+				gap_count[i] += 1
+	return gap_count
+
+def read_fasta(fas_file):
+	taxon_names = []
+	seq_aln = []
+	with open(fas_file,'r') as f:
+		for line in f:
+			if line[0] == '>':
+				taxon_names.append(line[1:-1])
+			else:
+				seq_aln.append(line[:-1])
+	return taxon_names, seq_aln	
+
+def write_fasta(output_file,taxon_names,seq_aln):
+	with open(output_file,'w') as f:
+		T = len(taxon_names)
+		for i in range(T):
+			f.write(">"+taxon_names[i]+"\n")
+			f.write(seq_aln[i]+"\n")
