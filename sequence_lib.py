@@ -11,7 +11,7 @@ def get_taxon_list(filename):
 	taxon_list = []
 	for line in open(filename,'r'):
 		if line[0] == '>':
-			taxon_list = taxon_list + [line[1:-1]]
+			taxon_list = taxon_list + [rstrip(line[1:])]
 	return sorted(taxon_list)
 
 
@@ -20,7 +20,7 @@ def hash_taxon_seq(filename):
 	f = open(filename,'r')
 	for line in f:
 		if line[0] == '>':
-			taxon_dict[line[1:-1]] = gap_rm(f.next()[:-1])
+			taxon_dict[line[1:-1]] = gap_rm(rstrip(f.next()))
 	return taxon_dict
 
 def gap_rm(str0,gap='-'):
@@ -80,8 +80,7 @@ def count_gaps(seq_aln):
 	gap_count = [0]*N
 	for seq in seq_aln:
 		for i in range(N):
-			if seq[i] == '-':
-				gap_count[i] += 1
+			gap_count[i] += (seq[i] == '-')
 	return gap_count
 
 def read_fasta(fas_file):
@@ -90,9 +89,9 @@ def read_fasta(fas_file):
 	with open(fas_file,'r') as f:
 		for line in f:
 			if line[0] == '>':
-				taxon_names.append(line[1:-1])
+				taxon_names.append(rstrip(line))
 			else:
-				seq_aln.append(line[:-1])
+				seq_aln.append(rstrip(line))
 	return taxon_names, seq_aln	
 
 def write_fasta(output_file,taxon_names,seq_aln):
