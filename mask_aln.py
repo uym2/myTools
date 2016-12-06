@@ -1,4 +1,6 @@
 #! /usr/bin/env python
+# Usage: python mask_aln.py <file_name> <mask_levels>
+
 
 from sys import argv
 from sequence_lib import count_gaps, read_fasta, write_fasta
