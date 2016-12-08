@@ -20,8 +20,8 @@ for edge in a_tree.preorder_edge_iter():
 
 br_avg = br_sum/br_count
 
-print "branch #: " + str(br_count)
-print "branch max: " + str(br_max)
-print "branch sum: " + str(br_sum)
-print "branch avg: " + str(br_avg)
+print("branch #: " + str(br_count))
+print("branch max: " + str(br_max))
+print("branch sum: " + str(br_sum))
+print("branch avg: " + str(br_avg))
 
