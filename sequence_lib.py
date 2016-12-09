@@ -98,5 +98,5 @@ def write_fasta(output_file,taxon_names,seq_aln):
 	with open(output_file,'w') as f:
 		T = len(taxon_names)
 		for i in range(T):
-			f.write(">"+taxon_names[i]+"\n")
+			f.write(taxon_names[i]+"\n")
 			f.write(seq_aln[i]+"\n")
