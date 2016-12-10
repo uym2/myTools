@@ -8,7 +8,7 @@ from sequence_lib import count_gaps, read_fasta, write_fasta
 
 file_in = argv[1]
 path_in,file_name = os.path.split(file_in)
-path_out = if (argv[2] == '-') path_in else argv[2] 
+path_out = path_in if (argv[2] == '-') else argv[2] 
 base_name,ext = os.path.splitext(file_name)
 
 taxon_names, seq_aln = read_fasta(file_in)
