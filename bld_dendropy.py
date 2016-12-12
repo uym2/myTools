@@ -20,5 +20,5 @@ tree2 = Tree.get_from_path(tree2_file,'newick',taxon_namespace=tns)
 tree1.encode_bipartitions()
 tree2.encode_bipartitions()
 
-print ('Euclidean Distance: ' + str(calculate.treecompare.euclidean_distance(tree1,tree2)) )
-print ('Manhattan Distance: '+ str( calculate.treecompare.weighted_robinson_foulds_distance(tree1,tree2)) )
+print (calculate.treecompare.euclidean_distance(tree1,tree2))
+#print ('Manhattan Distance: '+ str( calculate.treecompare.weighted_robinson_foulds_distance(tree1,tree2)) )
