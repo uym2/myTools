@@ -91,7 +91,7 @@ def read_fasta(fas_file):
 			if line[0] == '>':
 				taxon_names.append(line[1:].rstrip())
 			else:
-				seq_aln.append(line.rstrip())
+				seq_aln.append(line.upper().rstrip())
 	return taxon_names, seq_aln	
 
 def write_fasta(output_file,taxon_names,seq_aln):
