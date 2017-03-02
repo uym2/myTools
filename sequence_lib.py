@@ -100,3 +100,11 @@ def write_fasta(output_file,taxon_names,seq_aln):
 		for i in range(T):
 			f.write(">"+taxon_names[i]+"\n")
 			f.write(seq_aln[i]+"\n")
+
+def is_aligned(fas_file):
+	taxa,seqs = read_fasta(fas_file)
+	l = len(seqs[0])
+	for seq in seqs:
+		if len(seq) != l:
+			return False
+	return True
