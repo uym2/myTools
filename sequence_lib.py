@@ -91,7 +91,7 @@ def read_fasta(fas_file):
 			if line[0] == '>':
 				taxon_names.append(line[1:].rstrip())
 			else:
-				seq_aln.append(line.rstrip())
+				seq_aln.append(line.upper().rstrip())
 	return taxon_names, seq_aln	
 
 def write_fasta(output_file,taxon_names,seq_aln):
@@ -108,3 +108,20 @@ def is_aligned(fas_file):
 		if len(seq) != l:
 			return False
 	return True
+
+def gap_propagate(cons_seq,targ_seq):
+# propagate gaps from cons_seq to targ_seq; this is used after the cons_seq was aligned with another sequence and we want to
+# propage the alignment to targ_seq. This is a similar idea with transitivity used in PASTA; the ultimate goal is to merge 2 alignments,
+# but in this case we have a consensus sequence for each alignments and we also have a good way (properly using seconday structure) to align them.
+# NOTE: gap_propagate is NOT symmetric: only propagate from consensus to target, not in reverse; careful consider which sequence is the cons_seq and which is targ_seq!
+
+	out_seq = ''
+	i = 0
+	for c in cons_seq:
+		if c != '-':
+			out_seq += targ_seq[i]
+			i += 1
+		else:
+			out_seq += '-'
+
+	return out_seq
