@@ -1,3 +1,5 @@
+#! /usr/bin/env python
+
 # input: a file contains sequences (e.g. fasta) with gaps (as such in a groundtruth alignment file)
 # output: remove all gaps. The purpose is to obtain unaligned sequences from groundtruth file.
 
