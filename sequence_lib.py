@@ -125,3 +125,20 @@ def gap_propagate(cons_seq,targ_seq):
 			out_seq += '-'
 
 	return out_seq
+
+def impose_struct(pri_seq,str_seq):
+	out_pri = ''
+	out_str = ''
+
+	for i,c in enumerate(pri_seq):
+		if c != '-':
+			out_pri += c.upper()
+			c1 = str_seq[i]
+			if c1 == '(' or c1 == '<' or c1 == '{':
+				out_str += '('
+			elif c1 == ')' or c1 == '>' or c1 == '}':
+				out_str += ')'
+			else:
+				out_str += '.'
+	
+	return out_pri, out_str
