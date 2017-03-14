@@ -30,7 +30,7 @@ def tree_as_newick(a_tree,outfile=None,append=False):
 
 def __write_newick(node,outstream):
 	if node.is_leaf():
-			if node.taxon.label:
+			if node.taxon:
 				outstream.write(node.taxon.label)
 			else:
 				outstream.write(str(node.label))
