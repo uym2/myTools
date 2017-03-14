@@ -3,7 +3,7 @@ from dendropy import Tree
 
 def get_taxa(tree_file,scheme='newick'):
 	a_tree = Tree()
-	a_tree.get_from_path(tree_file,scheme)
+	a_tree.get_from_path(tree_file,scheme,preserve_underscores=True)
 	return [leaf.taxon.label for leaf in a_tree.leaf_nodes()]
 
 def report_taxa(tree_file,scheme='newick',listing=True,counting=True):
