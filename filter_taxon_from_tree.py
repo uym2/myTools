@@ -1,8 +1,12 @@
 #!/usr/bin/env python
 
 '''
-Adopted (with modifications) from my advisor
+@author: uym2
 
+Adopted (with modifications) from my advisor
+'''
+
+'''
 Created on Jun 3, 2011
 
 @author: smirarab
