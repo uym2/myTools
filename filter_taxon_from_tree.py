@@ -13,7 +13,7 @@ import os.path
 if __name__ == '__main__':
 
     if len(sys.argv) < 3: 
-        print("USAGE: treefile species_list_file [output]")
+        print("USAGE: treefile output species_list_file")
         sys.exit(1)
     treeName = sys.argv[1]
     #sample = open(sys.argv[2])
