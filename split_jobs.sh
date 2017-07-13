@@ -37,7 +37,7 @@ if [ -s $curr_file ]; then
 	cp /home/umai/my_gits/myTools/jobscr_template.$machine job\_$i/jobscr_$i.$machine
 	sed -i "s/#####/$jobname/g" job\_$i/jobscr_$i.$machine
 	sed -i "s/%%%%%/$queue/g" job\_$i/jobscr_$i.$machine
-	sed -i "s/*****/$ncore/g" job\_$i/jobscr_$i.$machine
+	sed -i "s/@@@@@/$ncore/g" job\_$i/jobscr_$i.$machine
 	echo python /home/umai/my_gits/myTools/core_launcher.py task$i $np >> job\_$i/jobscr_$i.$machine
 else
 	rm $curr_file

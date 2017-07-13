@@ -8,6 +8,3 @@ module load python
 export PYTHONPATH=/home/esayyari/.local/lib/python2.7/site-packages:$PYTHONPATH
 export PATH=/home/esayyari/.local/bin:$PATH
 export PYTHONPATH=/home/esayyari/pylauncher/pylauncher:$PYTHONPATH 
-for x in `cat corecommandlines`; do
-	eval "$x"
-done

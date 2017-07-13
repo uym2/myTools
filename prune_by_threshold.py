@@ -1,5 +1,8 @@
 #! /usr/bin/env python
 
+# remove leaves that are distant more than a given threshold from the root
+# only works for rooted tree
+
 from dendropy import Tree
 from sys import argv,stdout
 
@@ -19,8 +22,8 @@ def filter_by_threshold(a_tree,threshold):
             # update parent node
             p.child_removed = True
             removed = True
-            #try:
-            #    print(node.taxon.label + " removed")
+            if node.taxon:
+                print(node.taxon.label)
             #except:
             #    print(node.label + " removed")
         #elif len(node.child_nodes()) == 1:
@@ -42,7 +45,8 @@ def filter_by_threshold(a_tree,threshold):
 
 infile = argv[1]
 thres = float(argv[2])
+outfile = argv[3]
 
 a_tree = Tree.get_from_path(infile,"newick",preserve_underscores=True)
 filter_by_threshold(a_tree,thres)
-stdout.write(a_tree.as_string("newick"))
+a_tree.write_to_path(outfile,"newick")
