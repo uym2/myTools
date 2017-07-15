@@ -2,7 +2,7 @@
 #PBS -q %%%%%
 #PBS -N #####
 #PBS -l nodes=1:ppn=@@@@@
-#PBS -l walltime=48:00:00
+#PBS -l walltime=&&&&&:00:00
 cd $PBS_O_WORKDIR
 module load python
 export PYTHONPATH=/home/esayyari/.local/lib/python2.7/site-packages:$PYTHONPATH
