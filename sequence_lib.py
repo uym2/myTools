@@ -1,6 +1,7 @@
 # I/O lib for molecular sequences
 
 from os.path import isfile
+from os import remove
 
 try:
 	import cPickle as pickle
@@ -30,7 +31,7 @@ def gap_rm(str0,gap='-'):
 			str1 =  str1 + c
 	return str1
 
-def index_fasta(file_in,file_out=None):
+def index_fasta(file_in,file_out=None,store_index_file=True):
 	# only work for fasta format
 	f = open(file_in,'r')
 	seq_pointers = {}
@@ -42,6 +43,10 @@ def index_fasta(file_in,file_out=None):
 		if line[0] == '>':
 			seq_pointers[line[1:-1]] = fp
 		fp = f.tell()
+
+	if not store_index_file:
+		return seq_pointers
+
 	if not file_out:
 		file_extension = file_in.split('.')[-1]
 		file_out = file_in[:-(len(file_extension)+1)]+'.idx'
@@ -50,20 +55,24 @@ def index_fasta(file_in,file_out=None):
 	f.close()
 	fout.close()
 
-def load_index(file_in):
+	return seq_pointers
+
+def load_index(file_in,store_index_file=True,renew_index_file=False):
 	file_extension = file_in.split('.')[-1]
 	file_idx = file_in[:-(len(file_extension)+1)] + '.idx'
 
-	if not isfile(file_idx):
-		index_fasta(file_in)
-
-	with open(file_idx) as f:
-		seq_pointers = pickle.load(f)
+	if renew_index_file or not isfile(file_idx):
+		if renew_index_file:
+			remove(file_idx)
+		seq_pointers = index_fasta(file_in,store_index_file=store_index_file)
+	else:
+		with open(file_idx) as f:
+			seq_pointers = pickle.load(f)
 
 	return seq_pointers
 
-def sample_from_list(file_in,taxa_list,file_out):
-	seq_pointers = load_index(file_in)
+def sample_from_list(file_in,taxa_list,file_out,store_index_file=True,renew_index_file=False):
+	seq_pointers = load_index(file_in,store_index_file=store_index_file,renew_index_file=renew_index_file)
 	with open(file_in,'r') as fin:
 		with open(file_out,'w') as fout:	 
 			for taxon in taxa_list:
@@ -72,7 +81,7 @@ def sample_from_list(file_in,taxa_list,file_out):
 					fout.write(fin.readline())
 					fout.write(fin.readline())
 				except:
-					print ('taxon inconsistent in tree and sequence files')
+					print ('taxon inconsistent in query and input files')
 
 
 def count_gaps(seq_aln):
