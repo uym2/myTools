@@ -5,8 +5,8 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=@@@@@
 #SBATCH --export=ALL
-#SBATCH -t 48:00:00
-#SBATCH -A TG-BIO150043
+#SBATCH -t &&&&&:00:00
+#SBATCH -A uot138
 #cd /scratch/$USER/$SLURM_JOBID
 
 source /etc/profile.d/modules.sh
