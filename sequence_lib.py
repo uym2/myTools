@@ -103,6 +103,24 @@ def read_fasta(fas_file):
 				seq_aln.append(line.upper().rstrip())
 	return taxon_names, seq_aln	
 
+def sort_aln(taxon_names,seq_aln):
+    first_nongap_pos = [ len(seq_aln[0]) for i in range(len(seq_aln)) ]
+    
+    for i,seq in enumerate(seq_aln):
+        for j,r in enumerate(seq):
+            if r != '-':
+                first_nongap_pos[i] = j
+                break
+    sorted_idx = sorted(range(len(first_nongap_pos)),key=lambda x:first_nongap_pos[x])
+    sorted_names = []
+    sorted_aln = []
+    for i in sorted_idx:
+        sorted_aln.append(seq_aln[i])
+        sorted_names.append(taxon_names[i])
+
+    return sorted_names, sorted_aln
+    
+
 def write_fasta(output_file,taxon_names,seq_aln):
 	with open(output_file,'w') as f:
 		T = len(taxon_names)
