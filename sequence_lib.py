@@ -169,3 +169,10 @@ def impose_struct(pri_seq,str_seq):
 				out_str += '.'
 	
 	return out_pri, out_str
+
+def p_distance(seq1,seq2):
+    d = 0
+    for i,x in enumerate(seq1):
+        if x != seq2[i]:
+            d = d+1
+    return float(d)/len(seq1)
