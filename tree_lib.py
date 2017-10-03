@@ -1,6 +1,34 @@
 import sys
 from dendropy import Tree
 
+
+def prune_node(T,node):
+    if node is not T.seed_node:
+        p = node.parent_node()
+        p.remove_child(node)
+        if p.num_child_nodes() == 1:
+            v = p.child_nodes()[0]
+            if p is T.seed_node:
+                T.seed_node = v
+                p.remove_child(v)
+            else:
+                u = p.parent_node()
+                l = p.edge_length + v.edge_length
+                u.remove_child(p)
+                p.remove_child(v)
+                u.add_child(v)
+                v.edge_length = l
+
+
+
+def prune_tree(T,RS):
+# prune the taxa in the removing set RS from tree T
+    for leaf in T.leaf_iter():
+        if leaf.taxon.label in RS:
+            prune_node(leaf)
+
+
+
 def get_taxa(tree_file,scheme='newick'):
 	a_tree = Tree.get_from_path(tree_file,scheme,preserve_underscores=True)
 	return [leaf.taxon.label for leaf in a_tree.leaf_nodes()]
