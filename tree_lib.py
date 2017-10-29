@@ -1,6 +1,11 @@
 import sys
 from dendropy import Tree
+from decompose_tree import decompose_by_diameter
 
+
+def compute_diameter(tree_list):
+    for t in tree_list:
+        print(decompose_by_diameter(t)[0].seed_node.diameter)
 
 def prune_node(T,node):
     if node is not T.seed_node:
