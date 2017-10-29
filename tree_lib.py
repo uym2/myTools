@@ -30,7 +30,7 @@ def prune_tree(T,RS):
 # prune the taxa in the removing set RS from tree T
     for leaf in T.leaf_iter():
         if leaf.taxon.label in RS:
-            prune_node(leaf)
+            prune_node(T,leaf)
 
 
 
