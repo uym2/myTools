@@ -30,19 +30,16 @@ samples = random.sample(seq_pointers,sample_size)
 f_out = open(file_out,'w')
 
 for s in samples:
-	f.seek(s)
-	seq = f.readline()
-	f_out.write(seq)
-	L = f.readline()
-	while L[0] != '>':
-		if L[-1] == '\n':
-			f_out.write(L[:-1])
-		else:
-			f_out.write(L)
-		L = f.readline()
-		if not L:
-			break
-	f_out.write('\n')
+    f.seek(s)
+    seq = f.readline()
+    f_out.write(seq)
+    L = f.readline()
+    while L[0] != '>':
+        f_out.write(L.rstrip())
+        L = f.readline()
+        if not L:
+            break
+    f_out.write('\n')
 
 f.close()
 f_out.close()

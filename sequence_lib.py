@@ -79,10 +79,27 @@ def sample_from_list(file_in,taxa_list,file_out,store_index_file=True,renew_inde
                 try:
                     fin.seek(seq_pointers[taxon])
                     fout.write(fin.readline())
-                    line = fin.readline()
-                    while line[0] != '>':
-                        fout.write(line)
-                        line = fin.readline()
+                    L = fin.readline()
+                    while L[0] != '>':
+                        fout.write(L.rstrip())
+                        L = fin.readline()
+                        if not L:
+                            break
+                    fout.write('\n')        
+                except:
+                    print ('taxon inconsistent in query and input files')
+
+def filter_out_by_list(file_in,removing_list,file_out,store_index_file=True,renew_index_file=False):
+    seq_pointers = load_index(file_in,store_index_file=store_index_file,renew_index_file=renew_index_file)
+    taxa_list = list(set(seq_pointers.keys()) - set(removing_list))
+    
+    with open(file_in,'r') as fin:
+        with open(file_out,'w') as fout:     
+            for taxon in taxa_list:
+                try:
+                    fin.seek(seq_pointers[taxon])
+                    fout.write(fin.readline())
+                    fout.write(fin.readline())
                 except:
                     print ('taxon inconsistent in query and input files')
 
