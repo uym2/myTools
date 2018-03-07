@@ -2,6 +2,7 @@
 
 from os.path import isfile
 from os import remove
+from random import random
 
 try:
     import cPickle as pickle
@@ -35,12 +36,24 @@ def index_fasta(file_in,file_out=None,store_index_file=True):
     # only work for fasta format
     f = open(file_in,'r')
     seq_pointers = {}
+    count = {}
     fp = 0
     while 1:
         line = f.readline()
         if not line:
             break
         if line[0] == '>':
+            if line[1:-1] in count:
+                c = count[line[1:-1]]
+                p = float(c)/(c+1)
+                r = random()
+                #print(r)
+                count[line[1:-1]] += 1   
+                if r < p:
+                    continue    
+            else:
+                count[line[1:-1]] = 1
+                    
             seq_pointers[line[1:-1]] = fp
         fp = f.tell()
 
