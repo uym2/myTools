@@ -25,13 +25,22 @@ with open(infofile,'r') as f:
 
 myTree = Tree.get_from_path(treefile,"newick")
 
-for node in myTree.leaf_node_iter(): 
+leaves=list(myTree.leaf_node_iter())
+
+for node in leaves: 
     if node.taxon.label in mapping:
+        new_node = Node(edge_length=node.edge_length)
+        pNode = node.parent_node
+        pNode.remove_child(node)
+        pNode.add_child(new_node)
+        new_node.add_child(node)
+        pNode = new_node
+        
         for taxon_name in mapping[node.taxon.label]:
             new_taxon = Taxon(label=taxon_name)
             myTree.taxon_namespace.add_taxon(new_taxon)
             new_node = Node(edge_length=0,taxon=new_taxon)
-            node.parent_node.add_child(new_node)
+            pNode.add_child(new_node)
 
 
 

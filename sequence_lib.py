@@ -49,7 +49,7 @@ def index_fasta(file_in,file_out=None,store_index_file=True):
                 r = random()
                 #print(r)
                 count[line[1:-1]] += 1   
-                if r < p:
+                if r <= p:
                     continue    
             else:
                 count[line[1:-1]] = 1
