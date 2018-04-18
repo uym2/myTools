@@ -41,6 +41,7 @@ def main():
     L = 0
                     
     for seqfile in argv[1:-1]:
+        print(seqfile)
         newNames, newSeqs = read_fasta(seqfile)
         L = add_one_aln(concated,L,newNames,newSeqs)
 
