@@ -2,7 +2,7 @@
 
 # sample a tree with specified number of ingroups and outgroups
 
-from tree_lib import sample_with_outgroups
+from tree_lib import sample_with_outgroups, prune_tree
 from sys import argv, stdout
 from dendropy import Tree
 import argparse
@@ -16,7 +16,7 @@ parser.add_argument("-o","--outgroups",required=False,help="Number of outgroup s
 parser.add_argument("-r","--replicates",required=False,help="Number of replicates. Default: 1")
 parser.add_argument("-e","--outtree",required=False,help="Where to write the output trees to. Default: Inferred from the name of the input tree")
 parser.add_argument("-f","--outfile",required=False,help="Where to write the ingroups/outgroups of the samples to. Default: print to screen")
-
+parser.add_argument("-p","--pruneOG",required=False,help="Prune the outgroups and write the pruned tree to this file. Default: skip this")
 
 args = vars(parser.parse_args())
 
@@ -28,6 +28,7 @@ n_reps = int(args["replicates"]) if args["replicates"] else 1
 base_name,ext = splitext(treefile)
 outtreeFile = args["outtree"] if args["outtree"] else (base_name + "_sampled.trees")
 outfile = args["outfile"]
+outtree_noOG = args["pruneOG"]
 
 tree = Tree.get_from_path(treefile,'newick')
 
@@ -55,3 +56,10 @@ else:
             fout_tree.write(t.as_string('newick'))
 
     fout_info.close()
+
+    if outtree_noOG:
+        with open(outtree_noOG,'w') as f:
+            for t,igs,ogs in samples:
+                prune_tree(t,ogs)
+                f.write(t.as_string('newick'))                
+
