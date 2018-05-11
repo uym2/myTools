@@ -1,7 +1,69 @@
 import sys
 from dendropy import Tree
 from decompose_tree import decompose_by_diameter
+from random import sample, random
 
+def sample_and_prune(a_tree, n_ingroups, n_outgroups=1):
+    # Note: will prune the tree passed in 
+    L = []
+    C = a_tree.seed_node.child_nodes()
+    current = []
+    for node in a_tree.postorder_node_iter():
+        if node in C:
+            L.append((current,len(current)))
+            current = []
+        elif node.is_leaf():    
+            current.append(node.taxon.label)
+
+    en = 0
+    ogs = None
+    igs = None
+            
+    for i,item in enumerate(L):
+        # check if we can sample outgroups from L[i] and ingroups from the rest
+        listO,sO = item
+        sI = sum([item[1] for item in L[:i]+L[i+1:]])
+
+        if sO < n_outgroups or sI < n_ingroups:
+            continue
+        
+        en += 1
+        
+        # compute the probability that we will pick this combination instead of the previous one
+        prob = 1.0/en
+        if random() > prob:
+            # by chance this combination is not selected
+            continue
+
+        # sample n_outgroups from s
+        ogs = sample(listO,n_outgroups)    
+                             
+        # sample n_ingroups from the rest
+        listI = []
+        for item in L[:i]+L[i+1:] :
+            listI += item[0]
+
+        igs = sample(listI,n_ingroups)
+    
+    if igs is not None and ogs is not None:    
+        RS = [ x.taxon.label for x in a_tree.leaf_nodes() if x.taxon.label not in igs and x.taxon.label not in ogs ]
+        prune_tree(a_tree,RS)       
+        return True, igs,ogs
+
+    return False, None, None    
+    
+
+def sample_with_outgroups(a_tree, n_ingroups, n_outgroups=1, n_reps=1):
+# sample n_reps trees from a large tree, each has n_ingroups and n_outgroups taxa
+    samples = []
+    for i in range(n_reps):
+        t = Tree(a_tree)
+        check, igs, ogs = sample_and_prune(t, n_ingroups, n_outgroups=n_outgroups)
+        if not check:
+            return False, samples
+        samples.append((t,igs,ogs))
+        
+    return True,samples            
 
 def compute_diameter(tree_list):
     for t in tree_list:
@@ -9,18 +71,18 @@ def compute_diameter(tree_list):
 
 def prune_node(T,node):
     if node is not T.seed_node:
-        p = node.parent_node()
+        p = node.parent_node
         p.remove_child(node)
         if p.num_child_nodes() == 1:
             v = p.child_nodes()[0]
+            p.remove_child(v)
             if p is T.seed_node:
                 T.seed_node = v
-                p.remove_child(v)
+            #    p.remove_child(v)
             else:
-                u = p.parent_node()
+                u = p.parent_node
                 l = p.edge_length + v.edge_length
                 u.remove_child(p)
-                p.remove_child(v)
                 u.add_child(v)
                 v.edge_length = l
 
@@ -28,11 +90,10 @@ def prune_node(T,node):
 
 def prune_tree(T,RS):
 # prune the taxa in the removing set RS from tree T
-    for leaf in T.leaf_iter():
+    L = list(T.leaf_node_iter())
+    for leaf in L:
         if leaf.taxon.label in RS:
             prune_node(T,leaf)
-
-
 
 def get_taxa(tree_file,scheme='newick'):
 	a_tree = Tree.get_from_path(tree_file,scheme,preserve_underscores=True)

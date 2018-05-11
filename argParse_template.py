@@ -10,3 +10,5 @@ parser.add_argument("-c","--centroid",required=False,action='store_true',help="D
 parser.add_argument("-k","--k",required=False,help="The maximum number of leaves that can be removed. Default: auto-select based on the data")
 parser.add_argument("-q","--quantiles",required=False,help="The quantile(s) to set threshold. Default is 0.05")
 parser.add_argument("-m","--mode",required=False,help="Filtering mode: 'per-species', 'per-gene', 'all-genes','auto'. Default: auto")
+
+args = vars(parser.parse_args())
