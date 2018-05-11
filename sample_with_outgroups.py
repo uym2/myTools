@@ -6,7 +6,7 @@ from tree_lib import sample_with_outgroups, prune_tree
 from sys import argv, stdout
 from dendropy import Tree
 import argparse
-from os.path import splitext
+from os.path import splitext, abspath
 
 parser = argparse.ArgumentParser()
 
@@ -42,14 +42,15 @@ else:
     else:
         fout_info = stdout
 
+    fout_info.write("Sampled from " + abspath(treefile) + "\n")
     fout_info.write("Sampled " + str(n_reps) + " replicate(s) of " + str(n_ingroups) + " ingroup(s) and " + str(n_outgroups) + " outgroup(s)\n")
     with open(outtreeFile,'w') as fout_tree:
         for i,(t,igs,ogs) in enumerate(samples):
-            fout_info.write("Rep " + str(i+1)+":")
-            fout_info.write(" Ingroups: ")
+            fout_info.write("Rep " + str(i+1)+":\n")
+            fout_info.write("Ingroups: ")
             for i in igs:
                 fout_info.write(i + " ")
-            fout_info.write("Outgroups: ")
+            fout_info.write("\nOutgroups: ")
             for o in ogs:
                 fout_info.write(o + " ")
             fout_info.write("\n")
