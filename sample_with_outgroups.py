@@ -1,4 +1,4 @@
-# ! /usr/bin/env python
+#! /usr/bin/env python
 
 # sample a tree with specified number of ingroups and outgroups
 
