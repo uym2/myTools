@@ -47,7 +47,6 @@ def main():
     inputfiles = args["input"].split()
     outputfiles = args["output"].split()
 
-    print(len(outputfiles))
 
     if not (len(outputfiles) == 1 or len(outputfiles) == len(inputfiles)):
         print("The number of output files must either be 1 or the same as the number of input files!")
@@ -61,7 +60,6 @@ def main():
         taxa = TaxonNamespace()
             
         for i,filein in enumerate(inputfiles):
-            print(i)
             if multi_output:
                 fout = open(outputfiles[i],'w')
             with open(filein,'r') as fin:
