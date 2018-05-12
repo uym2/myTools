@@ -31,6 +31,7 @@ outfile = args["outfile"]
 outtree_noOG = args["pruneOG"]
 
 tree = Tree.get_from_path(treefile,'newick')
+ID = 0
 
 check,samples = sample_with_outgroups(tree, n_ingroups, n_outgroups=n_outgroups, n_reps=n_reps)
 
