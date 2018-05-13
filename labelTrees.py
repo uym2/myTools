@@ -2,7 +2,7 @@
 
 from dendropy import Tree, TaxonNamespace
 
-def label_primary_tree(t,prefix="I_"):
+def label_primary_tree(t,prefix="I"):
     label_mapping = {}
     labelID = 1
     t.encode_bipartitions()
@@ -17,7 +17,7 @@ def label_primary_tree(t,prefix="I_"):
     return label_mapping, labelID
     
 
-def label_secondary_tree(t,label_mapping,startID,prefix="I_"):
+def label_secondary_tree(t,label_mapping,startID,prefix="I"):
     t.encode_bipartitions()
     labelID = startID
     for node in t.preorder_node_iter():
@@ -29,6 +29,8 @@ def label_secondary_tree(t,label_mapping,startID,prefix="I_"):
                 node.label = prefix + str(labelID)
                 label_mapping[key] = node.label
                 labelID += 1    
+    
+    t.seed_node.label = prefix + str(0)
 
     return label_mapping, labelID
                   
