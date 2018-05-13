@@ -4,15 +4,14 @@ from dendropy import Tree, TaxonNamespace
 
 def label_primary_tree(t,prefix="I"):
     label_mapping = {}
-    labelID = 1
+    labelID = 0
     t.encode_bipartitions()
     for node in t.preorder_node_iter():
-        if not (node is t.seed_node or node.is_leaf()):
+        if not node.is_leaf():
             node.label = prefix + str(labelID)
             label_mapping[node.bipartition] = node.label
             labelID += 1
 
-    t.seed_node.label = prefix + str(0)
     
     return label_mapping, labelID
     
@@ -21,7 +20,7 @@ def label_secondary_tree(t,label_mapping,startID,prefix="I"):
     t.encode_bipartitions()
     labelID = startID
     for node in t.preorder_node_iter():
-        if not (node is t.seed_node or node.is_leaf()):
+        if not node.is_leaf():
             key = node.bipartition            
             if key in label_mapping:
                 node.label = label_mapping[key]
@@ -30,7 +29,6 @@ def label_secondary_tree(t,label_mapping,startID,prefix="I"):
                 label_mapping[key] = node.label
                 labelID += 1    
     
-    t.seed_node.label = prefix + str(0)
 
     return label_mapping, labelID
                   
@@ -60,7 +58,13 @@ def main():
         
         is_primary = True
         taxa = TaxonNamespace()
-            
+    
+    # Although using TreeList provided in Dendropy can be a more convenient solution,
+    # I opted out for that because it requires storing a large number of trees in the memory at the same time
+    # If the input trees are big then we will run out of memory 
+    # Had problem with a set of 7k trees of 10k leaves which required >60G of memory just to store the trees
+    # Here I read each tree and label it one-by-one. 
+    #Just have to be thoughtful about making the taxon_namespace shared among all the trees
         for i,filein in enumerate(inputfiles):
             if multi_output:
                 fout = open(outputfiles[i],'w')
