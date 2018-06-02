@@ -81,7 +81,7 @@ def prune_node(T,node):
             #    p.remove_child(v)
             else:
                 u = p.parent_node
-                l = p.edge_length + v.edge_length
+                l = p.edge_length + v.edge_length if v.edge_length is not None else None
                 u.remove_child(p)
                 u.add_child(v)
                 v.edge_length = l
