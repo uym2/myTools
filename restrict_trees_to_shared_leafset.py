@@ -8,26 +8,29 @@ parser = argparse.ArgumentParser()
 
 parser.add_argument("-i","--input",required=True,help="Input trees")
 parser.add_argument("-o","--output",required=True,help="Output trees")
-parser.add_argument("-l","--listing",required=True,help="Removing set")
-parser.add_argument("-v","--reverse",required=False,action='store_true',help="Do the reverse pruning: retain the listed taxa. Default: NO")
 
 args = vars(parser.parse_args())
 
-RS = args["listing"] if not args["reverse"] else None
+leafSet = None
 
 with open(args["input"],'r') as fin:
     treein = fin.readlines()
 
 treeout = []
+
+# NOTE: this is NOT a good implementation!
     
 for t in treein:
     tree = Tree.get(data=t,schema="newick")
-    if not RS:
-        RS = [ x.taxon.label for x in tree.leaf_node_iter() if x.taxon.label not in args["listing"] ]
+    S = set([ x.taxon.label for x in tree.leaf_node_iter() ])
+    leafSet = leafSet.intersection(S) if leafSet is not None else S
+
+for t in treein:
+    tree = Tree.get(data=t,schema="newick")    
+    RS = [ x.taxon.label for x in tree.leaf_node_iter() if x.taxon.label not in leafSet ]
     prune_tree(tree,RS)
     treeout.append(tree.as_string("newick"))
             
 with open(args["output"],'w') as fout:
     for t in treeout:
         fout.write(t)
-
