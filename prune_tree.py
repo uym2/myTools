@@ -21,11 +21,12 @@ with open(args["input"],'r') as fin:
 treeout = []
     
 for t in treein:
-    tree = Tree.get(data=t,schema="newick")
+    tree = Tree.get(data=t,schema="newick",preserve_underscores=True)
     if not RS:
         RS = [ x.taxon.label for x in tree.leaf_node_iter() if x.taxon.label not in args["listing"] ]
+        print(RS)
     prune_tree(tree,RS)
-    treeout.append(tree.as_string("newick"))
+    treeout.append(tree.as_string("newick", unquoted_underscores=True))
             
 with open(args["output"],'w') as fout:
     for t in treeout:
