@@ -3,6 +3,27 @@ from dendropy import Tree
 from decompose_tree import decompose_by_diameter
 from random import sample, random
 
+def collapse_edge(t,v):
+# collapse the branch above node v in tree t
+    if v.is_leaf() or v == t.seed_node:
+        return False
+    
+    u = v.parent_node
+    u.remove_child(v)
+    
+    Children = v.child_nodes()
+    
+    for c in Children:
+        l = c.edge_length
+        v.remove_child(c)
+        u.add_child(c)
+        c.parent_node = u
+        c.edge_length = l
+    
+    return True    
+            	
+
+
 def sample_and_prune(a_tree, n_ingroups, n_outgroups=1):
     # Note: will prune the tree passed in 
     L = []
