@@ -3,9 +3,30 @@ from dendropy import Tree
 from decompose_tree import decompose_by_diameter
 from random import sample, random
 
+def collapse_edges(t, nBr):
+# collapse nBr shortest branches in t
+   brList = []
+
+   for node in t.postorder_node_iter():
+        if not node.is_leaf() and node is not t.seed_node:
+            brList.append(node) 
+   brList.sort(key=lambda node:node.edge_length)
+   
+   if nBr > len(brList):
+       return False 
+
+   for i in range(nBr):
+       print("Collapsing branch " + str(brList[i].label))
+       if (collapse_edge(t,brList[i])):
+            print("Successed")
+       else:
+            print("Could not collapse edge!")     
+
+   return True
+
 def collapse_edge(t,v):
 # collapse the branch above node v in tree t
-    if v.is_leaf() or v == t.seed_node:
+    if v.is_leaf() or v is t.seed_node:
         return False
     
     u = v.parent_node
