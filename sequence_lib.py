@@ -7,7 +7,7 @@ from copy import copy
 try:
     import cPickle as pickle
 except:
-    import pickle
+    import _pickle as pickle
 
 def get_taxon_list(filename):
     taxon_list = []
@@ -64,7 +64,7 @@ def index_fasta(file_in,file_out=None,store_index_file=True):
     if not file_out:
         file_extension = file_in.split('.')[-1]
         file_out = file_in[:-(len(file_extension)+1)]+'.idx'
-    fout = open(file_out,'w')
+    fout = open(file_out,'wb')
     pickle.dump(seq_pointers,fout)
     f.close()
     fout.close()
@@ -101,7 +101,7 @@ def sample_from_list(file_in,taxa_list,file_out,store_index_file=True,renew_inde
                             break
                     fout.write('\n')        
                 except:
-                    print ('taxon inconsistent in query and input files')
+                    print ('taxon ' + taxon + ' not found in input files')
 
 def filter_out_by_list(file_in,removing_list,file_out,store_index_file=True,renew_index_file=False):
     seq_pointers = load_index(file_in,store_index_file=store_index_file,renew_index_file=renew_index_file)
@@ -115,7 +115,7 @@ def filter_out_by_list(file_in,removing_list,file_out,store_index_file=True,rene
                     fout.write(fin.readline())
                     fout.write(fin.readline())
                 except:
-                    print ('taxon inconsistent in query and input files')
+                    print ('taxon ' + taxon +  ' not found in input files')
 
 
 def count_gaps(seq_aln):
