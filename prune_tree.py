@@ -13,7 +13,7 @@ parser.add_argument("-v","--reverse",required=False,action='store_true',help="Do
 
 args = vars(parser.parse_args())
 
-RS = args["listing"] if not args["reverse"] else None
+RS = args["listing"].split() if not args["reverse"] else None
 
 with open(args["input"],'r') as fin:
     treein = fin.readlines()
@@ -23,7 +23,7 @@ treeout = []
 for t in treein:
     tree = Tree.get(data=t,schema="newick",preserve_underscores=True)
     if not RS:
-        RS = [ x.taxon.label for x in tree.leaf_node_iter() if x.taxon.label not in args["listing"] ]
+        RS = [ x.taxon.label for x in tree.leaf_node_iter() if x.taxon.label not in args["listing"].split() ]
     prune_tree(tree,RS)
     treeout.append(tree.as_string("newick", unquoted_underscores=True))
             
