@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# normalize all tree branch by the average root-to-tip distance
+# scale all tree branch by the specified scaling factor
 
 
 from sys import argv
