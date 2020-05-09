@@ -24,7 +24,7 @@ def get_leaf_list(tree):
 
 def shuffle_and_prune(tree,nleaves):
 # assume nleaves is sorted in descending order    
-    tree_rep = Tree.get(data = tree.as_string(schema='newick'),schema='newick')  
+    tree_rep = Tree.get(data = tree.as_string(schema='newick'),schema='newick',preserve_underscores=True)  
     leaves = get_leaf_list(tree_rep)
     shuffle(leaves)
     N = len(leaves)
@@ -46,7 +46,7 @@ nleaves = [int(n) for n in args["nleaves"].split()]
 nleaves.sort(reverse=True)
 nrep = int(args["rep"]) if args["rep"] else 1
 
-tree = Tree.get_from_path(inFile,'newick')
+tree = Tree.get_from_path(inFile,'newick',preserve_underscores=True)
 
 # make outdir and a sub-directory for each desired subtree's size
 mkdir(outdir)
